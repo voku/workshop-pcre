@@ -1,0 +1,24 @@
+{
+  "name": "reveal-embed-video",
+  "homepage": "https://github.com/pragdave/reveal-embed-video",
+  "authors": [
+    "Dave Thomas"
+  ],
+  "description": "Embed local video in a reveal.js presentation",
+  "keywords": [
+    "reveal",
+    "video"
+  ],
+  "ignore": [
+    "**/.*"
+  ],
+  "_release": "e6505f8a30",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e6505f8a30b4aed2a61e0d8d89a7034e90b70ff4"
+  },
+  "_source": "https://github.com/ThomasWeinert/reveal-embed-video.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/ThomasWeinert/reveal-embed-video.git"
+}

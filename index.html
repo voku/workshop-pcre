@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Introduction: PHP Extensions</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="bower_components/reveal.js/css/theme/black.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/highlight.js/styles/idea.css">
+    <style type="text/css">
+      @media print {
+        body.print-pdf .slide-menu-button {
+          display: none;
+        }
+      }
+    </style>
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'bower_components/reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/reveal.js/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <style>
+      .reveal section ul.code {
+        font-family: monospace;
+      }
+      .reveal section img.clipart {
+        border: none;
+        background: transparent;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="reveal" data-video="small top-right">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h1>PCRE</h1>
+          <h2>Matching Patterns</h2>
+          <p>
+            <small>@ThomasWeinert</small>
+          </p>
+        </section>
+
+        <section>
+          <section>
+            <h2>Matching: PHP Functions</h2>
+            <ul>
+              <li class="fragment">preg_match</li>
+              <li class="fragment">preg_match_all</li>
+            </ul>
+          </section>
+          <section>
+            <h3>preg_match</h3>
+            <p>Find first match</p>
+            <ul>
+              <li class="fragment"><code class="language-php">preg_match($pattern, $subject);</code></li>
+              <li class="fragment"><code class="language-php">preg_match($pattern, $subject, $matches);</code></li>
+              <li class="fragment"><code class="language-php">preg_match($pattern, $subject, $matches, $flags, $offset);</code></li>
+            </ul>
+          </section>
+          <section>
+            <h3>preg_match - return values</h3>
+            <ul>
+              <li class="fragment">Match count - 0 or 1</li>
+              <li class="fragment">FALSE for errors</li>
+            </ul>
+          </section>
+          <section>
+            <h3>preg_match_all</h3>
+            <p>Find all matches</p>
+            <ul>
+              <li><code class="language-php">preg_match_all($pattern, $subject);</code></li>
+              <li><code class="language-php">preg_match_all($pattern, $subject, $matches);</code></li>
+              <li><code class="language-php">preg_match_all($pattern, $subject, $matches, $flags, $offset);</code></li>
+            </ul>
+          </section>
+          <section>
+            <h3>preg_match_all - return values</h3>
+            <ul>
+              <li>Match count - 0 to n</li>
+              <li>FALSE for errors</li>
+            </ul>
+          </section>
+          <section>
+            <h3>$matches</h3>
+            <ul>
+              <li class="fragment">preg_match() - array, matched groups</li>
+              <li class="fragment">
+                preg_match_all() - array with
+                <ul>
+                  <li>PREG_PATTERN_ORDER - an array for each group in the pattern</li>
+                  <li>PREG_SET_ORDER - an array for each match</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Pattern Argument</h2>
+            <pre style="width: 50%"><span style="color:green;">/</span>string<span style="color:green;">/</span><span style="color:red;">u</span>
+│   │  │└ Modifier
+│   │  └ Delimiter
+│   └ Pattern
+└ Delimiter</pre>
+          </section>
+          <section>
+            <h3>Task: Match a string</h3>
+            <p>Match the string <em>nevercodealone</em>. This is case sensitive.</p>
+            <pre><code class="language-php">$pattern = '';
+
+$result = preg_match_all(
+  $pattern, 'https://nevercodealone.de', $matches
+);
+if ($result && count($matches[0]) == 1) {
+  echo 'SUCCESS';
+} else {
+  echo 'FAIL';
+}</code></pre>
+          </section>
+          <section>
+            <h2>Try different delimiters</h2>
+            <ul>
+              <li>ASCII</li>
+              <li>Letters and digits do NOT work.</li>
+              <li class="fragment">Brackets!</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Modifier</h2>
+            <ul>
+              <li><strong>U</strong> - ungreedy mode</li>
+              <li><strong>i</strong> - case insensitive</li>
+              <li><strong>u</strong> - utf-8 mode</li>
+              <li><strong>x</strong> - modifies whitespace behaviour</li>
+              <li><strong>s</strong> - modifies dot behaviour</li>
+              <li><strong>m</strong> - modifies anchor behaviour</li>
+              <li><strong>D</strong> - modifies behaviour of $ anchor</li>
+              <li>...</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Match a string case insensitive</h3>
+            <p>The modifier <strong>i</strong> allows case insensitive matches</p>
+            <p>Match the string <em>code</em>. This is case insensitive.</p>
+            <pre><code class="language-php">$pattern = '';
+
+$result = preg_match_all(
+  $pattern, 'code CODE Code', $matches
+);
+if ($result && count($matches[0]) == 3) {
+  echo 'SUCCESS';
+} else {
+  echo 'FAIL';
+}</code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>The Dot</h2>
+          </section>
+          <section>
+            <h3>Task: Match anything but newlines</h3>
+            <p>The <strong>.</strong> matches anything but a newline. To match
+              a <strong>.</strong> you will need to escape it.
+              Match the string <code>cc.cc.cc.cc</code>. "c" can by any character except a dot or a newline.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$result = preg_match_all(
+  $pattern,
+  "ab.cd.ef.gh\na\n.b\n.d\n.e\n\nabcdefghiklm",
+  $matches
+);
+if ($result && count($matches[0]) == 1) {
+  echo 'SUCCESS';
+} else {
+  echo 'FAIL';
+}</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Qualifier</h2>
+            <p>What will be matched?</p>
+            <p>Define bytes/characters that will be matched.</p>
+          </section>
+          <section>
+            <h3>Task: Match digits and non-digits</h3>
+            <p>The qualifier <strong>\d</strong> matches any digit (<code>0-9</code>).</p>
+            <p>The qualifier <strong>\D</strong> matches anything except a digit.</p>
+            <p>Match the a string with the structure <code>xxXxxXxxxx</code>. "x" represents a
+              digit, "X" a non digit.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$result = preg_match_all(
+  $pattern, "12.34.5678\n123456789\nab.cd.efgh", $matches
+);
+if ($result && count($matches[0]) == 1) {
+  echo 'SUCCESS';
+} else {
+  echo 'FAIL';
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(\\d\\d\\D\\d\\d\\D\\d\\d\\d\\d)';</code>
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Anchors</h2>
+            <p>Anchor your pattern to the start and/or end of the subject.</p>
+            <ul>
+              <li><strong>^</strong> - string start</li>
+              <li><strong>$</strong> - string end</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Validate string start</h3>
+            <p>The <strong>^</strong> anchors the pattern to the string start.</p>
+            <p>Validate that the string starts with a digit.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$subjects = [
+  '1. match' => TRUE, '2. match' => TRUE, '42' => TRUE,
+  'no match' => FALSE, "a 345 b" => FALSE, "end 3" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(^\\d)';</code>
+              <code>$pattern = '(\\A\\d)';</code>
+            </aside>
+          </section>
+          <section>
+            <h3>Task: Validate string end</h3>
+            <p>The <strong>$</strong> anchors the pattern to the string end.</p>
+            <p>Validate that the string ends with a digit.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$subjects = [
+  'match 1' => TRUE, 'match 2' => TRUE,
+  '42' => TRUE, "21\n" => TRUE,
+  'no match' => FALSE, "a 345 b" => FALSE, "3 start" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(\\d$)';</code>
+              <code>$pattern = '(\\d\\Z)';</code>
+            </aside>
+          </section>
+          <section>
+            <h3>Task: Validate a German zip code</h3>
+            <p>The modifier <strong>D</strong> makes sure that a linefeed at the end of the subject is not ignored.
+              Validate that the subject is a German zip code. It consists of 5 digits.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$subjects = [
+  '01234' => TRUE, '50670' => TRUE, '40213' => TRUE,
+  'abcdef' => FALSE, "50670\n" => FALSE, "123456" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes"><code>$pattern = '(^\d\d\d\d\d$)D';</code></aside>
+          </section>
+          <section>
+            <h2>Modifier and Alternatives</h2>
+            <ul>
+              <li>Modifier <strong>m</strong> - line anchors</li>
+              <li><code>\A</code> - string start</li>
+              <li><code>\Z</code> - string end, ignore linefeed</li>
+              <li><code>\z</code> - string end, recognize linefeed</li>
+              <li><code>\b</code> - word boundary</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Character Classes</h2>
+            <ul>
+              <li>Square Brackets: <code>[]</code></li>
+              <li><code>-</code> for ranges</li>
+              <li><code>^</code> for negative matches</li>
+              <li>many special characters loose function</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Match vowels</h3>
+            <p>Match all the vowels (aeiou) in the string.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$result = preg_match_all(
+  $pattern, 'https://nevercodealone.de', $matches
+);
+if ($result && count($matches[0]) == 8) {
+  echo 'SUCCESS';
+} else {
+  echo 'FAIL';
+}</code></pre>
+          </section>
+          <section>
+            <h3>Task: Match non-vowels</h3>
+            <p>Match all the non-vowels in the string.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$result = preg_match_all(
+  $pattern, 'https://nevercodealone.de', $matches
+);
+if ($result && count($matches[0]) == 17) {
+  echo 'SUCCESS';
+} else {
+  echo 'FAIL';
+}</code></pre>
+          </section>
+          <section>
+            <h3>Task: Validate hexadecimal bytes</h3>
+            <p>Validate that the string consists of two characters. The
+            characters can be digits or a letter between a and f.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$subjects = [
+  '01' => TRUE, '0f' => TRUE, 'FA' => TRUE,
+  'az' => FALSE, "foo" => FALSE, "123" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(^[a-fA-F0-9][a-fA-F0-9]$)';</code>
+              <code>$pattern = '(^[a-fA-F\\d][a-fA-F\\d]$)';</code>
+              <code>$pattern = '(^[a-f\\d][a-f\\d]$)i';</code>
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Quantifier</h2>
+            <p>How often will it be matched?</p>
+            <ul>
+              <li><code>*</code> - any count</li>
+              <li><code>?</code> - maximum of 1</li>
+              <li><code>{n,m}</code> - minimum of n, maximum of m</li>
+              <li><code>{n,}</code> - minimum of n</li>
+              <li><code>{,m}</code> - maximum of m</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Validate a German zip code</h3>
+            <p>The <code>{n}</code> syntax allows you to match a fixed repeat of qualifiers.
+              Validate that the subject is a German zip code. It consists of 5 digits.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$subjects = [
+  '01234' => TRUE, '50670' => TRUE, '40213' => TRUE,
+  'abcdef' => FALSE, "50670\n" => FALSE, "123456" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes"><code>$pattern = '(^\d{5}$)D';</code></aside>
+          </section>
+          <section>
+            <h3>Task: Validate a language code</h3>
+            <p>The <code>{n,m}</code> syntax allows you minimum and a maximum repetitions.
+              Validate that the subject is an 2 or 3 letter language code.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$subjects = [
+  'en' => TRUE, 'de' => TRUE,
+  'eng' => TRUE, 'deu' => TRUE,
+  '123' => FALSE, "en-US" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(^[a-z]{2,3}$)';</code>
+            </aside>
+          </section>
+          <section>
+            <h3>Task: Validate an integer</h3>
+            <p><code>?</code> matches one or none. <code>+</code> matches at least one repetition.
+            Validate an integer including an optional leading sign</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$subjects = [
+  '1' => TRUE, '123' => TRUE,
+  '+123' => TRUE, '-456' => TRUE,
+  '1.1' => FALSE, "abc" => FALSE, "123 456" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(^[+-]?\d+$)';</code>
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Unicode</h2>
+            <p>The modifier <code>u</code> activates Unicode UTF-8 mode.</p>
+            <ul>
+              <li><code>\X</code> - extended unicode grapheme sequence</li>
+              <li>
+                <code>\p{<em>xx</em>}</code>, <code>\p<em>x</em></code> -
+                character with unicode property
+              </li>
+              <li>
+                <code>\p{^<em>xx</em>}</code>, <code>\P{^<em>xx</em>}</code> -
+                character without unicode property
+              </li>
+              <li><code>\p{<em>script</em>}</code> - character from script</li>
+              <li><code>\x{<em>FFFF</em>}</code> - code point</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Match unicode letters</h3>
+            <p>Use the unicode property <code>L</code> to match any letter in the string
+              <code>"English, Русский, 中文"</code>.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$result = preg_match_all(
+  $pattern, 'English, Русский, 中文', $matches
+);
+if ($result && count($matches[0]) == 16) {
+  echo 'SUCCESS';
+} else {
+  echo 'FAIL';
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(\p{L})u';</code>
+              <code>$pattern = '(\pL)u';</code>
+            </aside>
+          </section>
+          <section>
+            <h3>Task: Match Cyrillic letters</h3>
+            <p>Match any cyrillic letter in the subject.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$result = preg_match_all(
+  $pattern, 'English, Русский, 中文', $matches
+);
+if ($result && count($matches[0]) == 7) {
+  echo 'SUCCESS';
+} else {
+  echo 'FAIL';
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(\p{Cyrillic})u';</code>
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Groups</h2>
+            <ul>
+              <li><code>(...)</code> - captured group</li>
+              <li><code>(?&lt;group_name>...)</code> - named group</li>
+              <li><code>(?:...)</code> - group without capture</li>
+              <li><code>((?i)...)</code>, <code>(?i:...)</code> - group modifiers</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Match a date</h3>
+            <p>Match a date in the format "YYYY-MM-DD". Capture each part into a named group (year, month, day).</p>
+            <pre><code class="language-php">$pattern = '()';
+
+if (
+  preg_match($pattern, '2017-02-27', $match) &&
+  (isset($match['year']) && $match['year'] == '2017') &&
+  (isset($match['month']) && $match['month'] == '02') &&
+  (isset($match['day']) && $match['day'] == '27')
+) {
+  echo "SUCCESS\n";
+} else {
+  echo "FAIL\n";
+}</code></pre>
+          </section>
+          <aside class="notes">
+            <code>$pattern = '(^(?&lt;year>\d{4})-(?&lt;month>\d{2})-(?&lt;day>\d{2})$)';</code>
+          </aside>
+          <section>
+            <h3>Task: Validate consecutive ughs</h3>
+            <p>Validate that the string contains 3 consecutive "ugh"s.</p>
+            <pre><code class="language-php">$pattern = '';
+
+$subjects = [
+  'ughughugh' => TRUE, 'ughughughugh' => TRUE,
+  'ughugahugh' => FALSE, "ughughugah" => FALSE,
+  "ughughughugah" => TRUE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '((?:ugh){3,})';</code>
+            </aside>
+          </section>
+          <section>
+            <img src="images/minion-banana-1.jpg"/>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Alternatives</h2>
+            <ul>
+              <li><code>|</code> - alternative patterns</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Validate title and name</h3>
+            <p>Match strings that start with a title ('Mr.', 'Ms.', 'Mrs.'), followed by a space and a string
+              that contains at least one letter.</p>
+            <pre><code class="language-php">$pattern = '()';
+
+/* DO NOT CHANGE */
+$subjects = [
+  'Mr. Doe' => TRUE, 'Mrs. Jane Doe' => TRUE, 'Ms. Marple' => TRUE,
+  'Mr. ' => FALSE, "Mrs. 1" => FALSE, "1. Mr. Doe" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(^(Mr|Ms|Mrs)\\. .*\p{L}.*$)u';</code>
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Format and comment</h2>
+            <ul>
+              <li>Modifier <code>x</code> allows formatting</li>
+              <li><code>#</code> - single line comment</li>
+              <li><code>(?#...)</code> - comment group</li>
+              <li><code>\Q...\E</code> - inline comment</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Example: Format and comment</h3>
+            <pre><code class="language-php">$_pattern = '(/
+  (?:[a-zA-Z\\d_-]+\\.) #title
+  (?&lt;mode>media|download|thumb)\\. # mode
+  (?:(?&lt;preview>preview)\\.)? # is preview
+  (?&lt;media_uri>
+    (?&lt;id>[A-Fa-f\\d]{32}) #id
+    (?:v(?&lt;version>\\d+))? #version
+    (?:\\.[a-zA-Z\\d]+)? #extension
+  )
+$)Dix';</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h2>Back references</h2>
+        </section>
+
+        <section>
+          <h2>Templates</h2>
+        </section>
+
+        <section>
+          <h2>Links</h2>
+          <ul>
+            <li><a href="http://www.php.net/manual/de/pcre.pattern.php">http://www.php.net/manual/de/pcre.pattern.php</a></li>
+            <li><a href="https://www.hackerrank.com/">https://www.hackerrank.com/</a></li>
+            <li><a href="https://regex101.com/">https://regex101.com/</a></li>
+            <li><a href="http://www.regular-expressions.info/">http://www.regular-expressions.info/</a></li>
+          </ul>
+        </section>
+      </div>
+
+    </div>
+
+    <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+    <script src="bower_components/reveal.js/js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        slideNumber: "c/t",
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        //parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        //parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'bower_components/reveal.js-menu/menu.js' },
+          //{ src: 'bower_components/reveal-embed-video/reveal-embed-video.js' },
+          { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ],
+
+        menu: {
+          side: 'left',
+          markers: true,
+          numbers: false,
+          themes: [
+            { name: 'Black', theme: 'bower_components/reveal.js/css/theme/black.css' },
+            { name: 'White', theme: 'bower_components/reveal.js/css/theme/white.css' }
+          ]
+        }
+      });
+
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "talk-php-extensions",
+  "authors": [
+    "Thomas Weinert <thomas@weinert.info>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "http://thomas.weinert.info",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "reveal.js": "^3.3.0",
+    "reveal.js-menu": "^0.7.1",
+    "reveal-embed-video": "https://github.com/ThomasWeinert/reveal-embed-video.git"
+  }
+}
