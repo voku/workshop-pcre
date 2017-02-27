@@ -43,12 +43,12 @@
     <![endif]-->
 
     <style>
-      .reveal section ul.code {
-        font-family: monospace;
+      .reveal section ul li code,
+      .reveal code {
+        font-family: "Source Code Pro", monospace;
       }
-      .reveal section img.clipart {
-        border: none;
-        background: transparent;
+      .reveal code .placeholder {
+        opacity: 0.65;
       }
     </style>
   </head>
@@ -467,15 +467,15 @@ foreach ($subjects as $subject => $shouldMatch) {
             <ul>
               <li><code>\X</code> - extended unicode grapheme sequence</li>
               <li>
-                <code>\p{<em>xx</em>}</code>, <code>\p<em>x</em></code> -
+                <code>\p{<em class="placeholder">xx</em>}</code>, <code>\p<em class="placeholder">x</em></code> -
                 character with unicode property
               </li>
               <li>
-                <code>\p{^<em>xx</em>}</code>, <code>\P{^<em>xx</em>}</code> -
+                <code>\p{^<em class="placeholder">xx</em>}</code>, <code>\P{^<em class="placeholder">xx</em>}</code> -
                 character without unicode property
               </li>
-              <li><code>\p{<em>script</em>}</code> - character from script</li>
-              <li><code>\x{<em>FFFF</em>}</code> - code point</li>
+              <li><code>\p{<em class="placeholder">script</em>}</code> - character from script</li>
+              <li><code>\x{<em class="placeholder">FFFF</em>}</code> - code point</li>
             </ul>
           </section>
           <section>
@@ -520,10 +520,10 @@ if ($result && count($matches[0]) == 7) {
           <section>
             <h2>Groups</h2>
             <ul>
-              <li><code>(...)</code> - captured group</li>
-              <li><code>(?&lt;group_name>...)</code> - named group</li>
-              <li><code>(?:...)</code> - group without capture</li>
-              <li><code>((?i)...)</code>, <code>(?i:...)</code> - group modifiers</li>
+              <li><code>(<span class="placeholder">...</span>)</code> - captured group</li>
+              <li><code>(?&lt;<em class="placeholder">group_name</em>><span class="placeholder">...</span>)</code> - named group</li>
+              <li><code>(?:<span class="placeholder">...</span>)</code> - group without capture</li>
+              <li><code>((?i)<span class="placeholder">...</span>)</code>, <code>(?i:<span class="placeholder">...</span>)</code> - group modifiers</li>
             </ul>
           </section>
           <section>
@@ -584,9 +584,9 @@ foreach ($subjects as $subject => $shouldMatch) {
               that contains at least one letter.</p>
             <pre><code class="language-php">$pattern = '()';
 
-/* DO NOT CHANGE */
 $subjects = [
-  'Mr. Doe' => TRUE, 'Mrs. Jane Doe' => TRUE, 'Ms. Marple' => TRUE,
+  'Mr. Doe' => TRUE, 'Mrs. Jane Doe' => TRUE,
+  'Ms. Marple' => TRUE,
   'Mr. ' => FALSE, "Mrs. 1" => FALSE, "1. Mr. Doe" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
@@ -608,13 +608,13 @@ foreach ($subjects as $subject => $shouldMatch) {
             <ul>
               <li>Modifier <code>x</code> allows formatting</li>
               <li><code>#</code> - single line comment</li>
-              <li><code>(?#...)</code> - comment group</li>
-              <li><code>\Q...\E</code> - inline comment</li>
+              <li><code>(?#<span class="placeholder">...</span>)</code> - comment group</li>
+              <li><code>\Q<span class="placeholder">...</span>\E</code> - remove special meaning</li>
             </ul>
           </section>
           <section>
             <h3>Example: Format and comment</h3>
-            <pre><code class="language-php">$_pattern = '(/
+            <pre><code class="language-php">$pattern = '(/
   (?:[a-zA-Z\\d_-]+\\.) #title
   (?&lt;mode>media|download|thumb)\\. # mode
   (?:(?&lt;preview>preview)\\.)? # is preview
@@ -628,11 +628,53 @@ $)Dix';</code></pre>
         </section>
 
         <section>
-          <h2>Back references</h2>
+          <section>
+            <h2>Back references</h2>
+            <ul>
+              <li><code>\<em class="placeholder">1</em></code>, <code>\g{<em class="placeholder">1</em>}</code> - reference group by index</li>
+              <li><code>(?P=<em class="placeholder">name</em>)</code>, <code>\g{<em class="placeholder">name</em>}</code> - reference group by name</li>
+              <li><code>\g{<em class="placeholder">-1</em>}</code> - relative group reference</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Validate drunken numbers</h3>
+            <p>Validate strings that consist of the any count of same digit (11, 444, ...).</p>
+            <pre><code class="language-php">$pattern = '()';
+
+$subjects = [
+  '7' => TRUE, '11' => TRUE, '444' => TRUE, '8888' => TRUE,
+  '12' => FALSE, "456" => FALSE, "ugh" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(^(\\d)\\1*$)';</code>
+              <code>$pattern = '(^(\\d)\\g{1}*$)';</code>
+              <code>$pattern = '(^(?&lt;digit>\\d)\\g{digit}*$)';</code>
+              <code>$pattern = '(^(?&lt;digit>\\d)(?P=digit)*$)';</code>
+            </aside>
+          </section>
         </section>
 
         <section>
           <h2>Templates</h2>
+          <ul>
+            <li><code>(?(DEFINE)(?&lt;<em class="placeholder">name</em>><span class="placeholder">...</span>))</code></li>
+            <li><code>(?&<em class="placeholder">name</em>)</code></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Assertions</h2>
+          <ul>
+            <li><code>(?=<span class="placeholder">...</span>)</code><code>(?!<span class="placeholder">...</span>)</code> - Lookahead</li>
+            <li><code>(?<=<span class="placeholder">...</span>)</code><code>(?<!<span class="placeholder">...</span>)</code> - Lookbehind</li>
+          </ul>
         </section>
 
         <section>
