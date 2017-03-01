@@ -68,6 +68,11 @@
         </section>
 
         <section>
+          <h2>Task Repository</h2>
+          <a href="https://bitbucket.org/thomasweinert/workshop-pcre-tasks">bitbucket.org/thomasweinert/workshop-pcre-tasks</a>
+        </section>
+
+        <section>
           <section>
             <h2>Matching: PHP Functions</h2>
             <ul>
@@ -186,12 +191,15 @@ if ($result && count($matches[0]) == 3) {
         <section>
           <section>
             <h2>The Dot</h2>
+            <ul>
+              <li>Matches anything except a newline</li>
+              <li>Matches anything if modifier "s" is set</li>
+              <li>Escape . with \ to match an actual .</li>
+            </ul>
           </section>
           <section>
             <h3>Task: Match anything but newlines</h3>
-            <p>The <strong>.</strong> matches anything but a newline. To match
-              a <strong>.</strong> you will need to escape it.
-              Match the string <code>cc.cc.cc.cc</code>. "c" can by any character except a dot or a newline.</p>
+            <p>Match the string <code>cc.cc.cc.cc</code>. "c" can by any character except a newline.</p>
             <pre><code class="language-php">$pattern = '()';
 
 $result = preg_match_all(
@@ -204,6 +212,9 @@ if ($result && count($matches[0]) == 1) {
 } else {
   echo 'FAIL';
 }</code></pre>
+            <aside class="notes">
+              <code>$pattern = '(..\\...\\...\\...)';</code>
+            </aside>
           </section>
         </section>
 
@@ -343,6 +354,9 @@ if ($result && count($matches[0]) == 8) {
 } else {
   echo 'FAIL';
 }</code></pre>
+            <aside class="notes">
+              <code>$pattern = '([aeiou])';</code>
+            </aside>
           </section>
           <section>
             <h3>Task: Match non-vowels</h3>
@@ -357,6 +371,9 @@ if ($result && count($matches[0]) == 17) {
 } else {
   echo 'FAIL';
 }</code></pre>
+            <aside class="notes">
+              <code>$pattern = '([^aeiou])';</code>
+            </aside>
           </section>
           <section>
             <h3>Task: Validate hexadecimal bytes</h3>
@@ -390,6 +407,8 @@ foreach ($subjects as $subject => $shouldMatch) {
             <ul>
               <li><code>*</code> - any count</li>
               <li><code>?</code> - maximum of 1</li>
+              <li><code>+</code> - minimum of 1</li>
+              <li><code>{n}</code> - exactly n</li>
               <li><code>{n,m}</code> - minimum of n, maximum of m</li>
               <li><code>{n,}</code> - minimum of n</li>
               <li><code>{,m}</code> - maximum of m</li>
@@ -662,18 +681,51 @@ foreach ($subjects as $subject => $shouldMatch) {
         </section>
 
         <section>
-          <h2>Templates</h2>
-          <ul>
-            <li><code>(?(DEFINE)(?&lt;<em class="placeholder">name</em>><span class="placeholder">...</span>))</code></li>
-            <li><code>(?&<em class="placeholder">name</em>)</code></li>
-          </ul>
+          <section>
+            <h2>Templates</h2>
+            <ul>
+              <li><code>(?(DEFINE)(?&lt;<em class="placeholder">name</em>><span class="placeholder">...</span>))</code></li>
+              <li><code>(?&<em class="placeholder">name</em>)</code></li>
+            </ul>
+          </section>
+          <section>
+            <h3>Task: Validate IpV4</h3>
+            <p>Define a template that matches number between 0 and 255. Use the template to match an IP.</p>
+            <pre><code class="language-php">$pattern = '';
+
+$subjects = [
+  '127.0.0.1' => TRUE, '0.0.0.0' => TRUE,
+  '255.255.255.0' => TRUE, '1.1.1.256' => FALSE,
+  "1.1.1.a" => FALSE, "-1.1.1.1" => FALSE
+];
+foreach ($subjects as $subject => $shouldMatch) {
+  if ($shouldMatch == preg_match($pattern, $subject)) {
+    echo "SUCCESS\n";
+  } else {
+    echo "FAIL\n";
+  }
+}</code></pre>
+          </section>
+          <section>
+            <h2>Pattern: IpV4</h2>
+            <pre><code class="language-php">$pattern = '(^
+  (?:(?&number)\\.){3}(?&number)
+  (?(DEFINE)
+    (?&lt;number>
+      25[0-5]| # 250 - 255
+      2[0-4]\\d| # 200 - 249
+      1?\\d{1,2} # 0 - 199
+    )
+  )
+$)Dx';</code></pre>
+          </section>
         </section>
 
         <section>
           <h2>Assertions</h2>
           <ul>
-            <li><code>(?=<span class="placeholder">...</span>)</code><code>(?!<span class="placeholder">...</span>)</code> - Lookahead</li>
-            <li><code>(?<=<span class="placeholder">...</span>)</code><code>(?<!<span class="placeholder">...</span>)</code> - Lookbehind</li>
+            <li><code>(?=<span class="placeholder">...</span>)</code>, <code>(?!<span class="placeholder">...</span>)</code> - Lookahead</li>
+            <li><code>(?<=<span class="placeholder">...</span>)</code>, <code>(?&lt;!<span class="placeholder">...</span>)</code> - Lookbehind</li>
           </ul>
         </section>
 
