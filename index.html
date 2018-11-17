@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Introduction: PHP Extensions</title>
+    <title>PCRE Workshop</title>
 
     <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
     <meta name="author" content="Hakim El Hattab">
@@ -29,7 +29,8 @@
 
     <!-- If the query includes 'print-pdf', include the PDF print sheet -->
     <script>
-      if( window.location.search.match( /print-pdf/gi ) ) {
+      var isPrintView = window.location.search.match( /print-pdf/gi);
+      if (isPrintView) {
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
@@ -213,7 +214,9 @@ if ($result && count($matches[0]) == 1) {
   echo 'FAIL';
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(..\\...\\...\\...)';</code>
+              <ul>
+                <li><code>$pattern = '(..\\...\\...\\...)';</code></li>
+              </ul>
             </aside>
           </section>
         </section>
@@ -241,7 +244,9 @@ if ($result && count($matches[0]) == 1) {
   echo 'FAIL';
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(\\d\\d\\D\\d\\d\\D\\d\\d\\d\\d)';</code>
+              <ul>
+                <li><code>$pattern = '(\\d\\d\\D\\d\\d\\D\\d\\d\\d\\d)';</code></li>
+              </ul>
             </aside>
           </section>
         </section>
@@ -273,8 +278,10 @@ foreach ($subjects as $subject => $shouldMatch) {
   }
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(^\\d)';</code>
-              <code>$pattern = '(\\A\\d)';</code>
+              <ul>
+                <li><code>$pattern = '(^\\d)';</code></li>
+                <li><code>$pattern = '(\\A\\d)';</code></li>
+              </ul>
             </aside>
           </section>
           <section>
@@ -296,8 +303,10 @@ foreach ($subjects as $subject => $shouldMatch) {
   }
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(\\d$)';</code>
-              <code>$pattern = '(\\d\\Z)';</code>
+              <ul>
+                <li><code>$pattern = '(\\d$)';</code></li>
+                <li><code>$pattern = '(\\d\\Z)';</code></li>
+              </ul>
             </aside>
           </section>
           <section>
@@ -355,7 +364,9 @@ if ($result && count($matches[0]) == 8) {
   echo 'FAIL';
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '([aeiou])';</code>
+              <ul>
+                <li><code>$pattern = '([aeiou])';</code></li>
+              </ul>
             </aside>
           </section>
           <section>
@@ -372,7 +383,9 @@ if ($result && count($matches[0]) == 17) {
   echo 'FAIL';
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '([^aeiou])';</code>
+              <ul>
+                <li><code>$pattern = '([^aeiou])';</code></li>
+              </ul>
             </aside>
           </section>
           <section>
@@ -393,9 +406,11 @@ foreach ($subjects as $subject => $shouldMatch) {
   }
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(^[a-fA-F0-9][a-fA-F0-9]$)';</code>
-              <code>$pattern = '(^[a-fA-F\\d][a-fA-F\\d]$)';</code>
-              <code>$pattern = '(^[a-f\\d][a-f\\d]$)i';</code>
+              <ul>
+                <li><code>$pattern = '(^[a-fA-F0-9][a-fA-F0-9]$)';</code></li>
+                <li><code>$pattern = '(^[a-fA-F\\d][a-fA-F\\d]$)';</code></li>
+                <li><code>$pattern = '(^[a-f\\d][a-f\\d]$)i';</code></li>
+              </ul>
             </aside>
           </section>
         </section>
@@ -411,7 +426,7 @@ foreach ($subjects as $subject => $shouldMatch) {
               <li><code>{n}</code> - exactly n</li>
               <li><code>{n,m}</code> - minimum of n, maximum of m</li>
               <li><code>{n,}</code> - minimum of n</li>
-              <li><code>{,m}</code> - maximum of m</li>
+              <li><code>{0,m}</code> - maximum of m</li>
             </ul>
           </section>
           <section>
@@ -452,7 +467,9 @@ foreach ($subjects as $subject => $shouldMatch) {
   }
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(^[a-z]{2,3}$)';</code>
+              <ul>
+                <li><code>$pattern = '(^[a-z]{2,3}$)';</code></li>
+              </ul>
             </aside>
           </section>
           <section>
@@ -474,7 +491,9 @@ foreach ($subjects as $subject => $shouldMatch) {
   }
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(^[+-]?\d+$)';</code>
+              <ul>
+                <li><code>$pattern = '(^[+-]?\d+$)';</code></li>
+              </ul>
             </aside>
           </section>
         </section>
@@ -512,8 +531,10 @@ if ($result && count($matches[0]) == 16) {
   echo 'FAIL';
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(\p{L})u';</code>
-              <code>$pattern = '(\pL)u';</code>
+              <ul>
+                <li><code>$pattern = '(\p{L})u';</code></li>
+                <li><code>$pattern = '(\pL)u';</code></li>
+              </ul>
             </aside>
           </section>
           <section>
@@ -530,7 +551,9 @@ if ($result && count($matches[0]) == 7) {
   echo 'FAIL';
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(\p{Cyrillic})u';</code>
+              <ul>
+                <li><code>$pattern = '(\p{Cyrillic})u';</code></li>
+              </ul>
             </aside>
           </section>
         </section>
@@ -562,7 +585,9 @@ if (
 }</code></pre>
           </section>
           <aside class="notes">
-            <code>$pattern = '(^(?&lt;year>\d{4})-(?&lt;month>\d{2})-(?&lt;day>\d{2})$)';</code>
+            <ul>
+              <li><code>$pattern = '(^(?&lt;year>\d{4})-(?&lt;month>\d{2})-(?&lt;day>\d{2})$)';</code></li>
+            </ul>
           </aside>
           <section>
             <h3>Task: Validate consecutive ughs</h3>
@@ -582,7 +607,9 @@ foreach ($subjects as $subject => $shouldMatch) {
   }
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '((?:ugh){3,})';</code>
+              <ul>
+                <li><code>$pattern = '((?:ugh){3,})';</code></li>
+              </ul>
             </aside>
           </section>
           <section>
@@ -616,7 +643,9 @@ foreach ($subjects as $subject => $shouldMatch) {
   }
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(^(Mr|Ms|Mrs)\\. .*\p{L}.*$)u';</code>
+              <ul>
+                <li><code>$pattern = '(^(Mr|Ms|Mrs)\\. .*\p{L}.*$)u';</code></li>
+              </ul>
             </aside>
           </section>
         </section>
@@ -672,10 +701,12 @@ foreach ($subjects as $subject => $shouldMatch) {
   }
 }</code></pre>
             <aside class="notes">
-              <code>$pattern = '(^(\\d)\\1*$)';</code>
-              <code>$pattern = '(^(\\d)\\g{1}*$)';</code>
-              <code>$pattern = '(^(?&lt;digit>\\d)\\g{digit}*$)';</code>
-              <code>$pattern = '(^(?&lt;digit>\\d)(?P=digit)*$)';</code>
+              <ul>
+                <li><code>$pattern = '(^(\\d)\\1*$)';</code></li>
+                <li><code>$pattern = '(^(\\d)\\g{1}*$)';</code></li>
+                <li><code>$pattern = '(^(?&lt;digit>\\d)\\g{digit}*$)';</code></li>
+                <li><code>$pattern = '(^(?&lt;digit>\\d)(?P=digit)*$)';</code></li>
+              </ul>
             </aside>
           </section>
         </section>
@@ -757,6 +788,8 @@ $)Dx';</code></pre>
         center: true,
         slideNumber: "c/t",
 
+        //showNotes: isPrintView ? true /*"separate-page" */ : false,
+
         theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
         transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
@@ -780,7 +813,7 @@ $)Dx';</code></pre>
           side: 'left',
           markers: true,
           numbers: false,
-          themes: [
+          themes: [,
             { name: 'Black', theme: 'bower_components/reveal.js/css/theme/black.css' },
             { name: 'White', theme: 'bower_components/reveal.js/css/theme/white.css' }
           ]
