@@ -520,7 +520,7 @@ foreach ($subjects as $subject => $shouldMatch) {
             <h3>Task: Match unicode letters</h3>
             <p>Use the unicode property <code>L</code> to match any letter in the string
               <code>"English, Русский, 中文"</code>.</p>
-            <pre><code class="language-php">$pattern = '()';
+            <pre><code class="language-php">$pattern = '()u';
 
 $result = preg_match_all(
   $pattern, 'English, Русский, 中文', $matches
@@ -571,13 +571,14 @@ if ($result && count($matches[0]) == 7) {
           <section>
             <h3>Task: Match a date</h3>
             <p>Match a date in the format "YYYY-MM-DD". Capture each part into a named group (year, month, day).</p>
-            <pre><code class="language-php">$pattern = '()';
+            <pre><code class="language-php">$pattern = '()u';
 
 if (
   preg_match($pattern, '2017-02-27', $match) &&
-  (isset($match['year']) && $match['year'] == '2017') &&
-  (isset($match['month']) && $match['month'] == '02') &&
-  (isset($match['day']) && $match['day'] == '27')
+  isset($match['year'], $match['month'], $match['day']) &&
+  $match['year'] === '2017' &&
+  $match['month'] === '02' &&
+  $match['day'] === '27'
 ) {
   echo "SUCCESS\n";
 } else {
@@ -590,8 +591,8 @@ if (
             </ul>
           </aside>
           <section>
-            <h3>Task: Validate consecutive ughs</h3>
-            <p>Validate that the string contains 3 consecutive "ugh"s.</p>
+            <h3>Task: Check for consecutive ughs</h3>
+            <p>Check if the the string contains 3 consecutive "ugh"s.</p>
             <pre><code class="language-php">$pattern = '';
 
 $subjects = [
@@ -758,6 +759,10 @@ $)Dx';</code></pre>
             <li><code>(?=<span class="placeholder">...</span>)</code>, <code>(?!<span class="placeholder">...</span>)</code> - Lookahead</li>
             <li><code>(?<=<span class="placeholder">...</span>)</code>, <code>(?&lt;!<span class="placeholder">...</span>)</code> - Lookbehind</li>
           </ul>
+        </section>
+
+        <section>
+          <img src="images/cheat%20sheet.png" style="height: 600px; border: none;"/>
         </section>
 
         <section>
