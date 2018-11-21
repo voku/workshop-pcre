@@ -17,33 +17,38 @@
     <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
     <link rel="stylesheet" href="bower_components/reveal.js/css/theme/black.css" id="theme">
 
+
     <!-- For syntax highlighting -->
     <link rel="stylesheet" href="lib/highlight.js/styles/idea.css">
+
     <style type="text/css">
       @media print {
         body.print-pdf .slide-menu-button {
           display: none;
         }
       }
+      .hljs-tag {
+        background-color: transparent;
+      }
     </style>
 
-    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
-    <script>
-      var isPrintView = window.location.search.match( /print-pdf/gi);
-      if (isPrintView) {
-        var link = document.createElement( 'link' );
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = 'bower_components/reveal.js/css/print/pdf.css';
-        document.getElementsByTagName( 'head' )[0].appendChild( link );
-      }
-    </script>
-
     <!--[if lt IE 9]>
-    <script src="bower_components/reveal.js/lib/js/html5shiv.js"></script>
+      <script src="bower_components/reveal.js/lib/js/html5shiv.js"></script>
     <![endif]-->
 
     <style>
+      body > div.reveal {
+        background: radial-gradient(
+          ellipse at center,
+          rgba(255,255,255,0.1) 0%,
+          rgba(255,255,255,0.15) 50%,
+          rgba(255,255,255,0) 100%
+        );
+      }
+      ul.code {
+        font-family: monospace;
+      }
+
       .reveal section ul li code,
       .reveal code {
         font-family: "Source Code Pro", monospace;
@@ -70,7 +75,7 @@
 
         <section>
           <h2>Task Repository</h2>
-          <a href="https://bitbucket.org/thomasweinert/workshop-pcre-tasks">bitbucket.org/thomasweinert/workshop-pcre-tasks</a>
+          <a href="https://github.com/ThomasWeinert/workshop-pcre-tasks">github.com/ThomasWeinert/workshop-pcre-tasks</a>
         </section>
 
         <section>
@@ -118,7 +123,7 @@
             <ul>
               <li class="fragment">preg_match() - array, matched groups</li>
               <li class="fragment">
-                preg_match_all() - array with
+                \preg_match_all() - array with
                 <ul>
                   <li>PREG_PATTERN_ORDER - an array for each group in the pattern</li>
                   <li>PREG_SET_ORDER - an array for each match</li>
@@ -138,13 +143,13 @@
           </section>
           <section>
             <h3>Task: Match a string</h3>
-            <p>Match the string <em>nevercodealone</em>. This is case sensitive.</p>
+            <p>Match the string &quot;<em>nevercodealone</em>&quot;. This is case sensitive.</p>
             <pre><code class="language-php">$pattern = '';
 
-$result = preg_match_all(
+$result = \preg_match_all(
   $pattern, 'https://nevercodealone.de', $matches
 );
-if ($result && count($matches[0]) == 1) {
+if ($result && \count($matches[0]) === 1) {
   echo 'SUCCESS';
 } else {
   echo 'FAIL';
@@ -174,15 +179,15 @@ if ($result && count($matches[0]) == 1) {
             </ul>
           </section>
           <section>
-            <h3>Task: Match a string case insensitive</h3>
+            <h3>Task: Match a string case&nbsp;insensitive</h3>
             <p>The modifier <strong>i</strong> allows case insensitive matches</p>
-            <p>Match the string <em>code</em>. This is case insensitive.</p>
+            <p>Match the string &quot;<em>code</em>&quot;. This is case insensitive.</p>
             <pre><code class="language-php">$pattern = '';
 
-$result = preg_match_all(
+$result = \preg_match_all(
   $pattern, 'code CODE Code', $matches
 );
-if ($result && count($matches[0]) == 3) {
+if ($result && \count($matches[0]) === 3) {
   echo 'SUCCESS';
 } else {
   echo 'FAIL';
@@ -203,12 +208,12 @@ if ($result && count($matches[0]) == 3) {
             <p>Match the string <code>cc.cc.cc.cc</code>. "c" can by any character except a newline.</p>
             <pre><code class="language-php">$pattern = '()';
 
-$result = preg_match_all(
+$result = \preg_match_all(
   $pattern,
   "ab.cd.ef.gh\na\n.b\n.d\n.e\n\nabcdefghiklm",
   $matches
 );
-if ($result && count($matches[0]) == 1) {
+if ($result && \count($matches[0]) === 1) {
   echo 'SUCCESS';
 } else {
   echo 'FAIL';
@@ -235,10 +240,10 @@ if ($result && count($matches[0]) == 1) {
               digit, "X" a non digit.</p>
             <pre><code class="language-php">$pattern = '()';
 
-$result = preg_match_all(
+$result = \preg_match_all(
   $pattern, "12.34.5678\n123456789\nab.cd.efgh", $matches
 );
-if ($result && count($matches[0]) == 1) {
+if ($result && \count($matches[0]) === 1) {
   echo 'SUCCESS';
 } else {
   echo 'FAIL';
@@ -271,7 +276,7 @@ $subjects = [
   'no match' => FALSE, "a 345 b" => FALSE, "end 3" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -296,7 +301,7 @@ $subjects = [
   'no match' => FALSE, "a 345 b" => FALSE, "3 start" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -320,7 +325,7 @@ $subjects = [
   'abcdef' => FALSE, "50670\n" => FALSE, "123456" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -355,10 +360,10 @@ foreach ($subjects as $subject => $shouldMatch) {
             <p>Match all the vowels (aeiou) in the string.</p>
             <pre><code class="language-php">$pattern = '()';
 
-$result = preg_match_all(
+$result = \preg_match_all(
   $pattern, 'https://nevercodealone.de', $matches
 );
-if ($result && count($matches[0]) == 8) {
+if ($result && \count($matches[0]) === 8) {
   echo 'SUCCESS';
 } else {
   echo 'FAIL';
@@ -374,10 +379,10 @@ if ($result && count($matches[0]) == 8) {
             <p>Match all the non-vowels in the string.</p>
             <pre><code class="language-php">$pattern = '()';
 
-$result = preg_match_all(
+$result = \preg_match_all(
   $pattern, 'https://nevercodealone.de', $matches
 );
-if ($result && count($matches[0]) == 17) {
+if ($result && \count($matches[0]) === 17) {
   echo 'SUCCESS';
 } else {
   echo 'FAIL';
@@ -399,7 +404,7 @@ $subjects = [
   'az' => FALSE, "foo" => FALSE, "123" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -440,7 +445,7 @@ $subjects = [
   'abcdef' => FALSE, "50670\n" => FALSE, "123456" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -460,7 +465,7 @@ $subjects = [
   '123' => FALSE, "en-US" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -484,7 +489,7 @@ $subjects = [
   '1.1' => FALSE, "abc" => FALSE, "123 456" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -522,10 +527,10 @@ foreach ($subjects as $subject => $shouldMatch) {
               <code>"English, Русский, 中文"</code>.</p>
             <pre><code class="language-php">$pattern = '()u';
 
-$result = preg_match_all(
+$result = \preg_match_all(
   $pattern, 'English, Русский, 中文', $matches
 );
-if ($result && count($matches[0]) == 16) {
+if ($result && \count($matches[0]) === 16) {
   echo 'SUCCESS';
 } else {
   echo 'FAIL';
@@ -540,12 +545,12 @@ if ($result && count($matches[0]) == 16) {
           <section>
             <h3>Task: Match Cyrillic letters</h3>
             <p>Match any cyrillic letter in the subject.</p>
-            <pre><code class="language-php">$pattern = '()';
+            <pre><code class="language-php">$pattern = '()u';
 
-$result = preg_match_all(
+$result = \preg_match_all(
   $pattern, 'English, Русский, 中文', $matches
 );
-if ($result && count($matches[0]) == 7) {
+if ($result && \count($matches[0]) === 7) {
   echo 'SUCCESS';
 } else {
   echo 'FAIL';
@@ -574,7 +579,7 @@ if ($result && count($matches[0]) == 7) {
             <pre><code class="language-php">$pattern = '()u';
 
 if (
-  preg_match($pattern, '2017-02-27', $match) &&
+  \preg_match($pattern, '2017-02-27', $match) &&
   isset($match['year'], $match['month'], $match['day']) &&
   $match['year'] === '2017' &&
   $match['month'] === '02' &&
@@ -601,7 +606,7 @@ $subjects = [
   "ughughughugah" => TRUE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -637,7 +642,7 @@ $subjects = [
   'Mr. ' => FALSE, "Mrs. 1" => FALSE, "1. Mr. Doe" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -695,7 +700,7 @@ $subjects = [
   '12' => FALSE, "456" => FALSE, "ugh" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -731,7 +736,7 @@ $subjects = [
   "1.1.1.a" => FALSE, "-1.1.1.1" => FALSE
 ];
 foreach ($subjects as $subject => $shouldMatch) {
-  if ($shouldMatch == preg_match($pattern, $subject)) {
+  if ($shouldMatch === (bool)\preg_match($pattern, $subject)) {
     echo "SUCCESS\n";
   } else {
     echo "FAIL\n";
@@ -805,7 +810,10 @@ $)Dx';</code></pre>
         // Optional libraries used to extend on reveal.js
         dependencies: [
           { src: 'bower_components/reveal.js-menu/menu.js' },
-          //{ src: 'bower_components/reveal-embed-video/reveal-embed-video.js' },
+          { src: 'bower_components/reveal-badges/src/badges.js' },
+          { src: 'bower_components/reveal-presenter-keys/src/presenter-keys.js' },
+          { src: 'bower_components/reveal-print/src/print.js' },
+
           { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
           { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
           { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
@@ -818,11 +826,20 @@ $)Dx';</code></pre>
           side: 'left',
           markers: true,
           numbers: false,
-          themes: [,
+          themes: [
             { name: 'Black', theme: 'bower_components/reveal.js/css/theme/black.css' },
             { name: 'White', theme: 'bower_components/reveal.js/css/theme/white.css' }
           ]
+        },
+
+        badges: {
+          languages : false
+        },
+
+        presenter: {
+          profile: 'Lenovo Yoga Mouse'
         }
+
       });
 
     </script>
